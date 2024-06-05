@@ -13,6 +13,7 @@ public:
     void startMoving();
     void moveFirstSlot();
     void moveSecondSlot();
+    ~MovingCar();
 
 signals:
     void updateScene();

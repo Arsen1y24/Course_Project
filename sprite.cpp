@@ -13,13 +13,13 @@ Sprite::Sprite(QObject* parent):
     currentRoom = 4;
     currentFrame = 0;
     spriteTimer = new QTimer();
-    vecRooms.append(QPoint(590, 370 - 12)); // 0
+    vecRooms.append(QPoint(630, 370 - 12)); // 0
     vecRooms.append(QPoint(1100, 370 - 12)); // 1
     vecRooms.append(QPoint(810, 660 - 12)); // 2
     vecRooms.append(QPoint(1140, 660 - 12)); // 3
     vecRooms.append(QPoint(460, 660 - 12)); // 4
     connect(spriteTimer, &QTimer::timeout, this, &Sprite::nextFrame);
-    spriteTimer -> start(90);
+    spriteTimer -> start(80);
     isWalkingNow = false;
 }
 
@@ -116,7 +116,11 @@ void Sprite::guyUseClipsOnBed()
 
 void Sprite::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    emit signalSharePosition(vecRooms[currentRoom].rx() + ix, vecRooms[currentRoom].ry() + iy);
+    if(vecRooms[currentRoom].ry() + iy == 591 && vecRooms[currentRoom].rx() + ix == 790)
+        emit signalSharePosition(720, 648);
+    else{
+        emit signalSharePosition(vecRooms[currentRoom].rx() + ix, vecRooms[currentRoom].ry() + iy);
+    }
     painter->drawPixmap(vecRooms[currentRoom].rx() + ix,
                         vecRooms[currentRoom].ry() + iy, *spriteImage, currentFrame, 0 + columnChange, 160, 160 + dYFrame);
     emit updateScene();
@@ -126,6 +130,7 @@ void Sprite::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
 void Sprite::guyUseMarkerOnPicture()
 {
+    drawsPicture = true;
     ix -= 20; // {}
     iy -= 57; // [][]
     dYFrame = 50;
@@ -163,7 +168,8 @@ void Sprite::nextPicFrame()
             ix += 20;
             iy += 57;
             //  currentRoom = 2;
-            spriteTimer->start(90);
+            spriteTimer->start(80);
+            drawsPicture = false;
             emit hadDrawn();
         }
     }
@@ -271,7 +277,20 @@ void Sprite::whatToDo()
     }
 }
 
-void Sprite::stopMoving(int xDistance)
+void Sprite::stopMoving(int xDistance, int yDistance)
 {
+ //   qDebug() << *spriteImage;
+    qDebug() << " stopMoving ! ! !";
+    if(spriteTimer != nullptr)
+        spriteTimer->stop();
+    if(drawsPicture){
+        qDebug() << "stopJump";
+        picTimer->stop();
+    }
 
+}
+
+void Sprite::deadSlot()
+{
+    // delete(this);
 }

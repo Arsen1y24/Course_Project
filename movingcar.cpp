@@ -22,6 +22,11 @@ void MovingCar::moveSecondSlot()
     connect(carTimer, &QTimer::timeout, this, &MovingCar::moveSecond);
 }
 
+MovingCar::~MovingCar()
+{
+
+}
+
 void MovingCar::moveFirst()
 {
     if(this->pos().rx() >= 346){
@@ -44,8 +49,8 @@ void MovingCar::moveSecond()
     if(this->pos().rx() >= 1710){
         disconnect(carTimer, &QTimer::timeout, this, &MovingCar::moveSecond);
         emit updateScene();
+        delete(carTimer);
         delete(this);
-        // this = nullptr;
     }
     else{
         moveBy(9, 0);

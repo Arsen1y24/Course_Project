@@ -24,17 +24,27 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>100</y>
-      <width>105</width>
-      <height>30</height>
+      <x>20</x>
+      <y>20</y>
+      <width>101</width>
+      <height>81</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>OpenSymbol</family>
+      <pointsize>16</pointsize>
+      <italic>true</italic>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="text">
-     <string>Start</string>
+     <string>Выход</string>
     </property>
    </widget>
   </widget>

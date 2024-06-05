@@ -60,15 +60,10 @@ private:
     bool markerIsUseless = false;
     QCursor myCurs;
 
-  //  int currentRoom;
-
     // QGraphicsItem interface
 protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-    // QGraphicsItem interface
-// protected:
-//     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // IMAGEHOUSE_H

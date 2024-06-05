@@ -18,7 +18,8 @@ public slots:
     void guyUseClipsOnBed();
     void guyUseMarkerOnPicture();
     void nextPicFrame();
-    void stopMoving(int xDistance);
+    void stopMoving(int xDistance, int yDistance);
+    void deadSlot();
 signals:
     void updateScene();
     void findWaySignal(int currentRoom, int endRoom);
@@ -64,6 +65,7 @@ private:
     bool checkOneSignalCall_3 = true;
     bool checkOneSignalCall_1 = true;
     bool checkOneSignalCall_2 = true;
+    bool drawsPicture = false;
     QVector<QPoint> vecRooms;
     QVector<int> vecWay;
 };

@@ -37,8 +37,6 @@ void GraphMe::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     // pockets
 
     painter->setPen(Qt::black);
-    // painter->drawRect(QRect(1420, 115, 200, 160));
-    // painter->drawRect(QRect(1420, 300, 200, 200));
     QPoint points[4]; // 2
     points[0] = QPoint(620, 520);
     points[1] = QPoint(620, 800);

@@ -12,11 +12,11 @@ public:
 
 signals:
     void clickOnMarker();
-    // QGraphicsItem interface
+
 public:
     virtual QRectF boundingRect() const;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-   // void canBeTaken();
+
     void markerInTheBag();
     void slotHideMarker();
     void slotShowMarker();
@@ -28,7 +28,6 @@ private:
     int xSize;
     int xPos;
     int yPos;
- //   bool canTakeMarker;
 
     // QGraphicsItem interface
 protected:

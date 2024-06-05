@@ -5,6 +5,7 @@ SpriteGoblin::SpriteGoblin(QObject *parent)
 {
     this->setZValue(3);
     spriteGoblinImage = new QPixmap(":spriteGoblin.png");
+    goesRight = true;
     //  spriteGoblinImage = new QPixmap(":spriteGoblinReverse.png");
     dix = 0;
     ix = 0;
@@ -23,6 +24,12 @@ SpriteGoblin::SpriteGoblin(QObject *parent)
     vecGoblinWay = {2, 1, 0, 1, 2, 4};
     connect(spriteGoblinTimer, &QTimer::timeout, this, &SpriteGoblin::nextFrame);
     spriteGoblinTimer -> start(100); // 180
+    numberOfAction = 0;
+}
+
+SpriteGoblin::~SpriteGoblin()
+{
+
 }
 
 QRectF SpriteGoblin::boundingRect() const
@@ -32,8 +39,11 @@ QRectF SpriteGoblin::boundingRect() const
 
 void SpriteGoblin::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    emit signalShareGoblinPosition(xPos + 10, yPos - 20, direction);
+    if(!(startsGoing && xPos < 600)){
+        emit signalShareGoblinPosition(xPos + 10, yPos - 20, direction);
+    }
     //qDebug() << oX;
+    qDebug() << currentFrame << " " << oX << " " << addToYGoblinSprite;
     painter->drawPixmap(xPos + 10, yPos - 120, ((*(spriteGoblinImage)).scaled(3000, 3000)), currentFrame, 280 + oX, 180, 280 + addToYGoblinSprite);
     emit updateScene();
     Q_UNUSED(option);
@@ -43,6 +53,7 @@ void SpriteGoblin::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 void SpriteGoblin::nextFrame()
 {
     if(startsGoing){
+        numberOfAction = 0;
         direction = 1;
         if(xPos <= 790){
             ix += 8;
@@ -67,6 +78,7 @@ void SpriteGoblin::nextFrame()
     else{
         switch (iterator){
         case 0:
+            numberOfAction = 0;
             direction = 1;
             didntSleep = true;
             ix += 4;
@@ -83,10 +95,12 @@ void SpriteGoblin::nextFrame()
                 ix = 0;
                 iy = 0;
                 spriteGoblinImage = new QPixmap(":spriteGoblinReverse.png");
+                goesRight = false;
                 currentFrame = 1845 + 185 * 5;
             }
             break;
         case 1:
+            numberOfAction = 0;
             direction = -1;
             ix -= 5;
             xPos = vecPlaces[vecGoblinWay[iterator]].rx() + ix;
@@ -101,6 +115,7 @@ void SpriteGoblin::nextFrame()
             }
             break;
         case 2:
+            numberOfAction = 0;
             direction = 1;
             ix += 5;
             xPos = vecPlaces[vecGoblinWay[iterator]].rx() + ix;
@@ -121,10 +136,12 @@ void SpriteGoblin::nextFrame()
                 iy = 0;
                 currentFrame = 1845 + 185 * 5;
                 spriteGoblinImage = new QPixmap(":spriteGoblinReverse.png");
+                goesRight = false;
                 oX = 0;
             }
             break;
         case 3:
+            numberOfAction = 0;
             direction = -1;
             // qDebug() << xPos;
             ix -= 4;
@@ -150,8 +167,9 @@ void SpriteGoblin::nextFrame()
             break;
 
         case 4:
+            numberOfAction = 0;
             direction = -1;
-      //      qDebug() << xPos << " " << yPos << " " << ix << " " << iy << " " << currentFrame << " " << oX;
+            //      qDebug() << xPos << " " << yPos << " " << ix << " " << iy << " " << currentFrame << " " << oX;
             ix -= 5;
             xPos = vecPlaces[vecGoblinWay[iterator]].rx() + ix;
             yPos = vecPlaces[vecGoblinWay[iterator]].ry() + iy;
@@ -165,6 +183,7 @@ void SpriteGoblin::nextFrame()
             }
             break;
         case 5:
+            numberOfAction = 0;
             direction = 1;
             if(ix == 0){
                 spriteGoblinTimer->stop();
@@ -198,22 +217,25 @@ void SpriteGoblin::nextFrame()
 
 void SpriteGoblin::staysIn_4()
 {
-    spriteGoblinTimer->start(10); // 180 ?
+    spriteGoblinTimer->start(100); // 180 ?
     spriteGoblinImage = new QPixmap(":spriteGoblin.png");
+    goesRight = true;
     currentFrame = 0;
 }
 
 void SpriteGoblin::startGoingFrom_4()
 {
+    numberOfAction = 0;
     currentFrame = 0;
     yPos -= 20;
     oX = 0;
     spriteGoblinImage = new QPixmap(":spriteGoblin.png");
+    goesRight = true;
     iterator++;
     ix = 0;
     iy = 0;
     addToYGoblinSprite = 0;
-    spriteGoblinTimer->start(45); // 180 ?? ?
+    spriteGoblinTimer->start(100); // 180 ?? ?
 }
 
 
@@ -234,7 +256,9 @@ void SpriteGoblin::reactionOnDrawing()
 
 void SpriteGoblin::execDrawingReaction()
 {
-    xPos += 30;
+    amountOfHarm++;
+    numberOfAction = 1;
+    xPos += 50;
     yPos += 30;
     qDebug() << "reaction emits " << iterator;
     timerDrawing = new QTimer();
@@ -257,6 +281,7 @@ void SpriteGoblin::nextDrawReactFrame()
     if (iterator == 3 && currentFrame < 1870 - 188){
         cntTimesReactedDrawing++;
         if(cntTimesReactedDrawing == 2){
+            numberOfAction = 0;
             oX = 0;
             iterator++;
             currentFrame = 2773 + 2770 - 2585;
@@ -266,12 +291,20 @@ void SpriteGoblin::nextDrawReactFrame()
             yPos -= 30;
             dCurFrame = 0;
             timerDrawing->stop();
-            spriteGoblinTimer->start(90);
-            cntTimesReactedDrawing = 0;
             // spriteGoblinImage = new QPixmap(":spriteGoblinReverse.png");
-        //    currentFrame = 1845 + 185 * 5;
+            //    currentFrame = 1845 + 185 * 5;
             //  drawingIsDone = false;
             emit deletePic();
+            if(amountOfHarm == 2){
+                QTimer::singleShot(1000, this, [=](){
+                    emit signalYouWin();
+                });
+            }
+            else{
+                spriteGoblinTimer->start(100);
+                cntTimesReactedDrawing = 0;
+                drawingIsDone = false;
+            }
         }
         else{
             currentFrame = 1870 + 187 * 5;
@@ -280,9 +313,10 @@ void SpriteGoblin::nextDrawReactFrame()
     else if(iterator == 5 && currentFrame > 188 * 4){
         cntTimesReactedDrawing++;
         if(cntTimesReactedDrawing == 2){
+            numberOfAction = 0;
             oX = 0;
             timerDrawing->stop();
-            spriteGoblinTimer->start(90);
+            spriteGoblinTimer->start(100);
             iterator = 0;
             ix = 0;
             iy = 0;
@@ -291,7 +325,7 @@ void SpriteGoblin::nextDrawReactFrame()
             currentFrame = 0;
             dCurFrame = 0;
             //    drawingIsDone = false;
-                        cntTimesReactedDrawing = 0;
+            cntTimesReactedDrawing = 0;
             emit deletePic();
         }
         else{
@@ -312,6 +346,7 @@ void SpriteGoblin::throwRock()
 
 void SpriteGoblin::execRock()
 {
+    numberOfAction = 2;
     timerRock = new QTimer();
     oX = 550;
     currentFrame = 1870 + 187 * 5;
@@ -333,12 +368,14 @@ void SpriteGoblin::nextRockFrame()
         if(numberOfThrows >= 2){
             oX = 0;
             timerRock->stop();
-            spriteGoblinTimer->start(180);
+            spriteGoblinTimer->start(100);
             iterator++;
             ix = 0;
             currentFrame = 0;
             spriteGoblinImage = new QPixmap(":spriteGoblin.png");
+            goesRight = true;
             numberOfThrows = 0;
+            numberOfAction = 0;
         }
         else{
             numberOfThrows++;
@@ -363,10 +400,12 @@ void SpriteGoblin::goToBed()
 
 void SpriteGoblin::execBed()
 {
+    numberOfAction = 4;
     yPos += 20;
     dCurFrame = -188;
     timerBed = new QTimer();
     spriteGoblinImage = new QPixmap(":spriteGoblinReverse.png");
+    goesRight = false;
     oX = 1700;
     currentFrame = 1870 + 187 * 5;
     connect(timerBed, &QTimer::timeout, this, &SpriteGoblin::nextBedFrame);
@@ -385,11 +424,14 @@ void SpriteGoblin::execClips()
     flies = true;
     qDebug() << "wewegw";
     if(clipsAreOnBed){
+        amountOfHarm++;
+        numberOfAction = 3;
         qDebug() << "Reaction)";
         timerClipsReaction = new QTimer();
         spriteGoblinImage = new QPixmap(":spriteGoblinReverse.png");
+        goesRight = false;
         oX = 300;
- //       yPos -= 12;
+        //       yPos -= 12;
         currentFrame = 1870 + 187 * 5;
         connect(timerClipsReaction, &QTimer::timeout, this, &SpriteGoblin::clipsReactionNextFrame);
         timerClipsReaction->start(125); // 100
@@ -405,8 +447,9 @@ void SpriteGoblin::stopSleeping()
     qDebug() << "GetUp";
     currentFrame = 0;
     spriteGoblinImage = new QPixmap(":spriteGoblin.png");
+    goesRight = true;
     timerBed->stop();
-    spriteGoblinTimer->start(45); // 180
+    spriteGoblinTimer->start(100); // 180
     oX = 0;
 }
 
@@ -447,7 +490,12 @@ void SpriteGoblin::clipsReactionNextFrame()
         qDebug() << "лялял";
         timerClipsReaction->stop();
         clipsAreOnBed = false;
-    //    yPos += 10;
+        if(amountOfHarm == 2){
+            QTimer::singleShot(1000, this, [=](){
+                emit signalYouWin();
+            });
+        }
+        //    yPos += 10;
         QTimer::singleShot(975, this, &SpriteGoblin::execBed); // 700
     }
 }
@@ -457,6 +505,7 @@ void SpriteGoblin::clipsReactionNextFrame()
 
 void SpriteGoblin::goblinLaughs()
 {
+    numberOfAction = 5;
     direction = -1;
     addToYGoblinSprite = -30;
     spriteGoblinTimer->stop();
@@ -466,7 +515,7 @@ void SpriteGoblin::goblinLaughs()
     xPos += 20;
     currentFrame = 1870 + 187 * 5;
     connect(laughTimer, &QTimer::timeout, this, &SpriteGoblin::nextLaughFrame);
-    laughTimer->start(25); // 100 ?
+    laughTimer->start(45); // 100 ?
 }
 
 void SpriteGoblin::nextLaughFrame()
@@ -483,5 +532,120 @@ void SpriteGoblin::nextLaughFrame()
             emit startGoingFrom_4();
             cntLaughs = 0;
         }
+    }
+}
+
+
+// goes to me
+
+void SpriteGoblin::goToEat(int xDistance, int yDistance)
+{
+    xToGo = xDistance < 0 ? std::min(0, xDistance + 70) : std::max(0, xDistance - 70);
+    yToGo = yDistance * (xToGo / xDistance);
+    numToDivide = 120;
+    if(xToGo < 200)
+        numToDivide = 30;
+    if(xToGo < 100)
+        numToDivide = 12;
+    dXGoToMe = xToGo / numToDivide;
+    dYGoToMe = yToGo /numToDivide;
+    if(xDistance < -10){
+        spriteGoblinTimer->stop();
+        dCurFrame = -187;
+        currentFrame = 1870 + 187 * 5;
+        timerGoToEat = new QTimer();
+        connect(timerGoToEat, &QTimer::timeout, this, &SpriteGoblin::nextGoToMeFrame);
+        timerGoToEat->start(25); // 100 ?
+        spriteGoblinImage = new QPixmap(":spriteGoblinReverse.png");
+        goesRight = false;
+    }
+    else if(xDistance > 10){
+        spriteGoblinTimer->stop();
+        dCurFrame = 187;
+        currentFrame = 0;
+        timerGoToEat = new QTimer();
+        connect(timerGoToEat, &QTimer::timeout, this, &SpriteGoblin::nextGoToMeFrame);
+        timerGoToEat->start(25); // 100 ?
+        spriteGoblinImage = new QPixmap(":spriteGoblin.png");
+        goesRight = true;
+    }
+    else{
+        if(goesRight){
+            currentFrame = 0;
+            dCurFrame = 187;
+        }
+        else{
+            currentFrame = 1870 + 187 * 5;
+            dCurFrame = -187;
+        }
+        spriteGoblinTimer->stop();
+        qDebug() << "eats111111";
+        emit eatingSignal();
+    }
+}
+
+void SpriteGoblin::nextGoToMeFrame()
+{
+    cntAmountEatFrames++;
+    if(cntAmountEatFrames == numToDivide){
+        qDebug() << " eats";
+        emit eatingSignal();
+        timerGoToEat->stop();
+    }
+    xPos += dXGoToMe;
+    yPos += dYGoToMe;
+    currentFrame += dCurFrame;
+    if(xToGo > 0){
+        if(currentFrame > 187 * 5){
+            currentFrame = 0;
+        }
+    }
+    else{
+        if(currentFrame < 1870){
+            currentFrame = 1870 + 187 * 5;
+        }
+    }
+}
+
+void SpriteGoblin::eatingSlot()
+{
+    qDebug() << goesRight;
+    yPos += 40;
+    xPos += 40;
+    oX = 1125;
+    if(goesRight){
+        //spriteGoblinImage = new QPixmap(":spriteGoblin.png");
+        begCurrentFrame = 0;
+        currentFrame = 0;
+        dCurFrame = 187;
+    }
+    else{
+        //spriteGoblinImage = new QPixmap(":spriteGoblinReverse.png");
+        begCurrentFrame = 1870 + 187 * 5;
+        currentFrame = 1870 + 187 * 5;
+        dCurFrame = -187;
+    }
+    currentFrame = begCurrentFrame;
+    timerEats = new QTimer();
+    connect(timerEats, &QTimer::timeout, this, &SpriteGoblin::nextEatingFrame);
+    timerEats->start(270);
+}
+
+void SpriteGoblin::nextEatingFrame()
+{
+    qDebug() << currentFrame << " " << goesRight << " " << begCurrentFrame;
+    if(amountOfEatenBones >= 1){
+        timerEats->stop();
+        QTimer::singleShot(1000, this, [=](){
+            emit signalYouLose();
+        });
+
+    }
+    currentFrame += dCurFrame;
+    framesEating++;
+    if(framesEating > 13){
+        currentFrame = begCurrentFrame;
+        framesEating = 0;
+        amountOfEatenBones++;
     }
 }

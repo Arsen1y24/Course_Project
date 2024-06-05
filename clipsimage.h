@@ -23,7 +23,6 @@ public:
 private:
     QPixmap* clipsImage;
     QPixmap pixClips;
-   // bool visible;
     int xSize;
     int xPos;
     int yPos;

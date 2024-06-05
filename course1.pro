@@ -9,9 +9,11 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    basicitemtouse.cpp \
     bush.cpp \
     clipsimage.cpp \
+    dialoglose.cpp \
+    dialogstart.cpp \
+    dialogwin.cpp \
     donemessage.cpp \
     flowerbush.cpp \
     graphme.cpp \
@@ -20,7 +22,6 @@ SOURCES += \
     mainwindow.cpp \
     markerimage.cpp \
     movingcar.cpp \
-    neighbourway.cpp \
     picdrawing.cpp \
     pocket.cpp \
     sprite.cpp \
@@ -29,9 +30,11 @@ SOURCES += \
 
 HEADERS += \
     MyHeaders.h \
-    basicitemtouse.h \
     bush.h \
     clipsimage.h \
+    dialoglose.h \
+    dialogstart.h \
+    dialogwin.h \
     donemessage.h \
     flowerbush.h \
     graphme.h \
@@ -39,7 +42,6 @@ HEADERS += \
     mainwindow.h \
     markerimage.h \
     movingcar.h \
-    neighbourway.h \
     picdrawing.h \
     pocket.h \
     sprite.h \
@@ -47,6 +49,9 @@ HEADERS += \
     tree.h
 
 FORMS += \
+    dialoglose.ui \
+    dialogstart.ui \
+    dialogwin.ui \
     mainwindow.ui
 
 # Default rules for deployment.

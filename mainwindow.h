@@ -16,6 +16,10 @@
 #include "tree.h"
 #include "pocket.h"
 
+#include "dialogwin.h"
+#include "dialoglose.h"
+#include "dialogstart.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -28,12 +32,10 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    //virtual void hideEvent(QHideEvent *event);
     ~MainWindow();
 
 private slots:
     void updScene();
-    void on_pushButton_3_clicked();
     void addGoblinOnScene();
     void slotDelClips();
     void slotDelMarker();
@@ -43,18 +45,31 @@ private slots:
     void clearPic();
     void getMyPosition(int xPosition, int yPosition);
     void getGobPosition(int xGobPosition, int yGobPosition, int directionGob);
+    void showImageYouLose();
+    void showImageYouWin();
+    void startDrawing();
+    void on_pushButton_clicked();
 
 signals:
     void startCarMovingFirst();
     void startCarMovingSecond();
-    void signalGoblinNotices(int xDistance);
+    void signalGoblinNotices(int xDistance, int yDistance);
 private:
     int xMyPos = 100;
     int yMyPos = 100;
     int xGobPos = 0;
     int yGobPos = 0;
     int dirGob = 1;
+    bool spriteGuyExists = false;
+    bool goblinExists = false;
+    bool myCarExists = false;
+    bool markerOnSceneExists = false;
+    bool clipsOnSceneExist = false;
+    bool myMessageExists = false;
+    bool onceNotice = true;
+    bool picDrawExists = false;
     Ui::MainWindow *ui;
+
     QTimer *timer;
     QTimer* timerRelations;
     QPainter *paint;
@@ -75,20 +90,10 @@ private:
     Tree* tree;
     Pocket* pocketClips;
     Pocket* pocketMarker;
-    //HousePic* hPic;
+    DialogWin* winForm;
+    DialogLose* loseForm;
+    DialogStart* startForm;
     void drawScene();
     void checkRelations();
-
-    // QWidget interface
-// protected:
-//     virtual void hideEvent(QHideEvent *event);
-
-//     // QWidget interface
-// protected:
-//     virtual void resizeEvent(QResizeEvent *event);
-
-    // QObject interface
-public:
- //   virtual bool event(QEvent *event);
 };
 #endif // MAINWINDOW_H
