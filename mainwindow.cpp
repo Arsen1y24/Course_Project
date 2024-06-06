@@ -152,6 +152,9 @@ void MainWindow::drawScene()
     scene->addItem(pocketClips);
     scene->addItem(pocketMarker);
     scene->addItem(tree);
+    scene->addItem(bush);
+    scene->addItem(fBush);
+
     scene->update();
     timerRelations = new QTimer();
     connect(timerRelations, &QTimer::timeout, this, &MainWindow::checkRelations);

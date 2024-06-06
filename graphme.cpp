@@ -23,38 +23,38 @@ QRectF GraphMe::boundingRect() const
 
 void GraphMe::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->drawRect(QRect(620, 240, 330, 260)); // 0
-    painter->drawRect(QRect(950, 240, 300, 260)); // 1
-    painter->drawRect(QRect(295, 520, 320, 280)); // 4
+    // painter->drawRect(QRect(620, 240, 330, 260)); // 0
+    // painter->drawRect(QRect(950, 240, 300, 260)); // 1
+    // painter->drawRect(QRect(295, 520, 320, 280)); // 4
 
-    painter->setPen(Qt::yellow);
-    painter->drawRect(QRect(1160, 700, 80, 50));
-    painter->drawRect(QRect(1110, 650, 80, 50));
-    painter->drawRect(QRect(970, 410, 220, 80));
-    painter->drawRect(QRect(780, 545, 130, 100));
+    // painter->setPen(Qt::yellow);
+    // painter->drawRect(QRect(1160, 700, 80, 50));
+    // painter->drawRect(QRect(1110, 650, 80, 50));
+    // painter->drawRect(QRect(970, 410, 220, 80));
+    // painter->drawRect(QRect(780, 545, 130, 100));
 
 
-    // pockets
+    // // pockets
 
-    painter->setPen(Qt::black);
-    QPoint points[4]; // 2
-    points[0] = QPoint(620, 520);
-    points[1] = QPoint(620, 800);
-    points[2] = QPoint(946, 800);
-    points[3] = QPoint(1190, 520);
-    QPolygon pol;
-    pol << QPoint(points[0]) << QPoint(points[1]) << QPoint(points[2]) <<
-        QPoint(points[3]);
-    painter -> drawPolygon(pol);
+    // painter->setPen(Qt::black);
+    // QPoint points[4]; // 2
+    // points[0] = QPoint(620, 520);
+    // points[1] = QPoint(620, 800);
+    // points[2] = QPoint(946, 800);
+    // points[3] = QPoint(1190, 520);
+    // QPolygon pol;
+    // pol << QPoint(points[0]) << QPoint(points[1]) << QPoint(points[2]) <<
+    //     QPoint(points[3]);
+    // painter -> drawPolygon(pol);
 
-    QPoint points1[4]; // 3
-    points1[0] = QPoint(1190, 520);
-    points1[1] = QPoint(1270, 520);
-    points1[3] = QPoint(946, 800);
-    points1[2] = QPoint(1270, 800);
-    QPolygon pol1;
-    pol1 << QPoint(points1[0]) << QPoint(points1[1]) << QPoint(points1[2]) << QPoint(points1[3]);
-    painter -> drawPolygon(pol1);
+    // QPoint points1[4]; // 3
+    // points1[0] = QPoint(1190, 520);
+    // points1[1] = QPoint(1270, 520);
+    // points1[3] = QPoint(946, 800);
+    // points1[2] = QPoint(1270, 800);
+    // QPolygon pol1;
+    // pol1 << QPoint(points1[0]) << QPoint(points1[1]) << QPoint(points1[2]) << QPoint(points1[3]);
+    // painter -> drawPolygon(pol1);
 
     Q_UNUSED(option);
     Q_UNUSED(widget);
